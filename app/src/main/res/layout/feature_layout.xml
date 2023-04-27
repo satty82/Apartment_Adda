@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:id="@+id/feature_ll"
+    android:padding="10dp"
+    android:layout_margin="20dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_sports"
+            android:textStyle="bold"
+            android:textColor="@color/Midnightblue"
+            android:textSize="20sp"
+            android:fontFamily="serif-monospace"
+            android:gravity="center_horizontal"
+            />
+
+        <Spinner
+            android:id="@+id/sports_spinner"
+            android:backgroundTint="@color/Midnightblue"
+            android:padding="10dp"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_date"
+            android:textStyle="bold"
+            android:textColor="@color/Midnightblue"
+            android:textSize="20sp"
+            android:fontFamily="serif-monospace"
+            android:gravity="center_horizontal"
+            />
+
+        <TextView
+            android:tag="tv"
+            android:padding="10dp"
+            android:backgroundTint="@color/Midnightblue"
+            android:text="@string/select_date"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:textAlignment="center"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_time"
+            android:textColor="@color/Midnightblue"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:fontFamily="serif-monospace"
+            android:gravity="center_horizontal"
+            />
+
+        <Spinner
+            android:id="@+id/clubh_time_spinner"
+            android:padding="10dp"
+            android:layout_width="170dp"
+            android:backgroundTint="@color/Midnightblue"
+            android:visibility="visible"
+            android:layout_marginStart="20dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tenn_time_tv1"
+            android:text="@string/from"
+            android:padding="10dp"
+            android:layout_width="80dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tenn_time_tv2"
+            android:text="@string/to"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:layout_width="70dp"
+            android:layout_marginStart="30dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirm_button"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:backgroundTint="#5C5CFF"
+        app:cornerRadius="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        style="@style/MyButtonStyle"
+        android:text="@string/confirm"
+        android:fontFamily="sans-serif-medium"/>
+
+
+</LinearLayout>

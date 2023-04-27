@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Apartment_adda</string>
+    <string name="content1">a. Clubhouse (10am to 4pm: Rs. 100/hour, 4pm to 10pm: Rs. 500/hour)
+</string>
+    <string name="content2">
+b. Tennis Court (Rs. 50/hour)</string>
+    <string name="to">To</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_sports">Select Sports</string>
+    <string name="confirm">Confirm</string>
+    <string name="from">From</string>
+    <string name="select_time">Select Time</string>
+    <string name="note">Note:</string>
+</resources>
