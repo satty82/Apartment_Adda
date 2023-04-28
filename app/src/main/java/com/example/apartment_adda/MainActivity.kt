@@ -2,6 +2,7 @@ package com.example.apartment_adda
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import java.util.Calendar
 import kotlin.math.abs
 
@@ -46,6 +48,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var sport_time_array = arrayOf("10am to 4pm","4pm to 10pm")
     private var tennis_time_array = arrayOf("1 hr","2 hr","3 hr","4 hr","5 hr","6 hr","7 hr","8 hr")
 
+    private lateinit var viewModel: MainViewModel
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,10 +59,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val drawable = ColorDrawable(Color.parseColor("#5C5CFF"))
         supportActionBar?.setBackgroundDrawable(drawable)
 
+         viewModel = this.run {
+             ViewModelProvider(this).get(MainViewModel::class.java)
+         }
+
         infoArray = ArrayList()
 
         initfunction()
-
         setSportAdapter()
         setClubTimeAdapter()
 
@@ -69,14 +76,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         tennis_time_tv1.setOnClickListener {
           showTimePickerDialog(tennis_time_tv1)
-//            Log.i("Main tennis_time_tv1 ", time1!!)
 
         }
 
         tennis_time_tv2.setOnClickListener {
               showTimePickerDialog(tennis_time_tv2)
-//            Log.i("Main tennis_time_tv2 ", time2!!)
-
 
         }
 
@@ -97,9 +101,47 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         Log.i("Main insertInfoToArray ", "$sports $date $time1 $time2 $clubh_time")
 
+//        viewModel.livedata.postValue("$datee, $time11. $time22, $sportss, $clubh_timee")
+
+
+        viewModel.datelivedata.observe(this) {
+
+            date = it
+            Log.i("Main insert ", " $it ")
+
+        }
+
+        viewModel.sportslivedata.observe(this) {
+
+            sports = it
+
+            Log.i("Main insert ", " $it ")
+
+        }
+        viewModel.time1livedata.observe(this) {
+
+            time1 = it
+
+            Log.i("Main insert ", " $it ")
+
+        }
+        viewModel.time2livedata.observe(this) {
+
+            time2 = it
+
+            Log.i("Main insert ", " $it ")
+
+        }
+        viewModel.clubhouselivedata.observe(this) {
+
+            clubh_time = it
+
+            Log.i("Main insert ", " $it ")
+
+        }
+
 
         if(date!=null) {
-
 
             if (infoArray.contains("$sports $date $time1 $time2 $clubh_time")) {
                 //Show Alert box , Booking failed
@@ -187,10 +229,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                     if(tennis_time_tv1 == tv) {
                         tv.setText("$hourOfDay")
-                        time1 = "$hourOfDay"
+//                        time11 = "$hourOfDay"
+                        viewModel.time1livedata.value = "$hourOfDay"
+
                     }else{
                         tv.setText("$hourOfDay")
-                        time2 = "$hourOfDay"
+//                        time22 = "$hourOfDay"
+                        viewModel.time2livedata.value = "$hourOfDay"
                     }
 
                     Log.i("Main inside", newTime)
@@ -215,12 +260,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val day = c.get(Calendar.DAY_OF_MONTH)
 
 
-        val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val dpd = DatePickerDialog(this, { view, year, monthOfYear, dayOfMonth ->
 
             // Display Selected date in textbox
-            selectDatetv.setText("" + dayOfMonth + ", " + monthOfYear + ", " + year)
+            selectDatetv.text = "$dayOfMonth, $monthOfYear, $year"
 
-            date = "" + dayOfMonth + ", " + monthOfYear + ", " + year
+//            datee = "$dayOfMonth, $monthOfYear, $year"
+
+            viewModel.datelivedata.value = "$dayOfMonth, $monthOfYear, $year"
 
         }, year, month, day)
 
@@ -274,7 +321,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 {
                     Log.i("Main ", sport_array[position])
 
-                    sports = sport_array[position]
+                    viewModel.sportslivedata.value = sport_array[position]
 
                     club_time_spinner.visibility = View.GONE
                     tennis_time_tv1.visibility = View.VISIBLE
@@ -285,7 +332,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 else{
                     Log.i("Main ", sport_array[position])
 
-                    sports = sport_array[position]
+//                    sports = sport_array[position]
+                    viewModel.sportslivedata.value = sport_array[position]
+
 
                     club_time_spinner.visibility = View.VISIBLE
                     tennis_time_tv1.visibility = View.GONE
@@ -297,9 +346,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         else if(parent?.id == R.id.clubh_time_spinner){
 
-                clubh_time = sport_time_array[position]
+//                clubh_time = sport_time_array[position]
+//                  clubh_timee = sport_time_array[position]
+                viewModel.clubhouselivedata.value = sport_time_array[position]
 
-        }
+
+            }
         else  if(parent?.id == R.id.tenn_time_tv1){}
     }
 
