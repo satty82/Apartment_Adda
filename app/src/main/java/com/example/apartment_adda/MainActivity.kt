@@ -2,7 +2,6 @@ package com.example.apartment_adda
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -33,6 +32,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var selectTimetv : TextView
 
     private lateinit var infoArray : ArrayList<String>
+    private lateinit var time1ArrayTennis :ArrayList<Int>
+    private lateinit var time2ArrayTennis : ArrayList<Int>
+
 
     private lateinit var confirm_button : Button
 
@@ -46,7 +48,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private var sport_array = arrayOf("ClubHouse","Tennis Court")
     private var sport_time_array = arrayOf("10am to 4pm","4pm to 10pm")
-    private var tennis_time_array = arrayOf("1 hr","2 hr","3 hr","4 hr","5 hr","6 hr","7 hr","8 hr")
 
     private lateinit var viewModel: MainViewModel
 
@@ -64,6 +65,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
          }
 
         infoArray = ArrayList()
+        time1ArrayTennis = ArrayList()
+        time2ArrayTennis =ArrayList()
 
         initfunction()
         setSportAdapter()
@@ -98,11 +101,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         var actualCost : Int
         var message : String = "Amount"
 
-
         Log.i("Main insertInfoToArray ", "$sports $date $time1 $time2 $clubh_time")
-
-//        viewModel.livedata.postValue("$datee, $time11. $time22, $sportss, $clubh_timee")
-
 
         viewModel.datelivedata.observe(this) {
 
@@ -145,29 +144,39 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             if (infoArray.contains("$sports $date $time1 $time2 $clubh_time")) {
                 //Show Alert box , Booking failed
-                AlertDialog.Builder(this)
-                    .setTitle("Booking Status")
-                    .setMessage("Booking failed, Already booked")
-                    .setCancelable(true)
-                    .setPositiveButton(
-                        "ok"
-                    ) { dialog, which -> dialog.dismiss() }.show()
+                showDialogInfo("Booking failed, Already booked")
+
 
             } else {
 
                 if (sports == "Tennis Court") {
 
-                    if(time1 != null && time2 != null) {
+                    time1ArrayTennis.add(time1!!.toInt())
+                    time2ArrayTennis.add(time2!!.toInt())
 
-//                        if (time1!!.toInt() > time2!!.toInt() && time1!!.toInt() < time2!!.toInt()) {
+                    Log.d("Main","time1 - $time1ArrayTennis, time2 - $time2ArrayTennis")
+
+                    if(time1 != null && time2 != null) {
 
                             actualTime = abs( (time1!!.toInt() - time2!!.toInt()))
                             actualCost = actualTime * 50
 
+                        val checktime = checkfor1hr(time1!!, time2!!)
+                        Log.d("Main","$checktime")
+
+                        if(checktime) {
                             infoArray.add("$sports $date $time1 $time2 $clubh_time")
+                            showDialogInfo("Booked,for $actualTime hrs, Rs ${actualCost}")
 
-                           showDialogInfo("for $actualTime hrs, Rs ${actualCost}")
+                        }
+                        else{
+                            time1ArrayTennis.removeLast()
+                            time2ArrayTennis.removeLast()
+                            Log.d("Main last removed","time1 - $time1ArrayTennis, time2 - $time2ArrayTennis")
 
+                            showDialogInfo("Booking failed, Already booked")
+
+                        }
 
                     }
                     else{
@@ -204,11 +213,27 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         Log.d("MainActivity ",infoArray.toString())
     }
 
+    private fun checkfor1hr(time1: String, time2: String) : Boolean {
+
+        //start here
+
+        if(time1ArrayTennis.contains(time1.toInt()+1) || time1ArrayTennis.contains(time1.toInt()-1))
+        {
+            return false
+
+        }else
+            return !(time2ArrayTennis.contains(time2.toInt()+1) || time2ArrayTennis.contains(time2.toInt()-1))
+
+
+
+
+    }
+
     private fun showDialogInfo(message: String) {
 
         AlertDialog.Builder(this)
             .setTitle("Booking Status")
-            .setMessage("Booked, ${message}")
+            .setMessage("$message")
             .setCancelable(true)
             .setPositiveButton(
                 "OK"
@@ -265,7 +290,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             // Display Selected date in textbox
             selectDatetv.text = "$dayOfMonth, $monthOfYear, $year"
 
-//            datee = "$dayOfMonth, $monthOfYear, $year"
 
             viewModel.datelivedata.value = "$dayOfMonth, $monthOfYear, $year"
 
@@ -332,7 +356,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 else{
                     Log.i("Main ", sport_array[position])
 
-//                    sports = sport_array[position]
                     viewModel.sportslivedata.value = sport_array[position]
 
 
